@@ -4,7 +4,7 @@ import com.anywr.ahmedtest.security.jwt.JWTFilter;
 import com.anywr.ahmedtest.security.jwt.TokenProvider;
 import com.anywr.ahmedtest.web.rest.vm.LoginVM;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

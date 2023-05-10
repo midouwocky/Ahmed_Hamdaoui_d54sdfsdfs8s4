@@ -3,7 +3,7 @@ package com.anywr.ahmedtest.service.dto;
 import com.anywr.ahmedtest.config.Constants;
 import com.anywr.ahmedtest.domain.User;
 import java.io.Serializable;
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
 
 /**
  * A DTO representing a user, with his authorities.
