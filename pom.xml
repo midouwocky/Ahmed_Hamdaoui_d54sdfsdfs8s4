@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.anywr</groupId>
 	<artifactId>ahmedtest</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.2-SNAPSHOT</version>
 	<name>ahmedtest</name>
 	<description>Projet test pour anywr</description>
 	<properties>
