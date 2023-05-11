@@ -12,8 +12,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -55,7 +55,7 @@ public class StudentResource {
 	 * @throws URISyntaxException if the Location URI syntax is incorrect.
 	 */
 	@PostMapping("/students")
-	public ResponseEntity<Student> createStudent(@RequestBody @jakarta.validation.Valid Student student)
+	public ResponseEntity<Student> createStudent(@RequestBody @javax.validation.Valid Student student)
 			throws URISyntaxException {
 		log.debug("REST request to save Student : {}", student);
 		if (student.getId() != null) {

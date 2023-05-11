@@ -15,7 +15,7 @@ import org.zalando.problem.Problem;
 import org.zalando.problem.spring.web.advice.ProblemHandling;
 
 import io.micrometer.common.util.StringUtils;
-import jakarta.annotation.Nonnull;
+import javax.annotation.Nonnull;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler{

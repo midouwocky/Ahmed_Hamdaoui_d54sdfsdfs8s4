@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.validation.constraints.*;
+import javax.validation.constraints.*;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 /**
  * A StudyClass.

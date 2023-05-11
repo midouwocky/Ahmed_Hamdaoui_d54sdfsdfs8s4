@@ -4,8 +4,8 @@ import com.anywr.ahmedtest.service.UserService;
 import com.anywr.ahmedtest.web.rest.errors.InvalidPasswordException;
 import com.anywr.ahmedtest.web.rest.vm.RegisterUserDTO;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
