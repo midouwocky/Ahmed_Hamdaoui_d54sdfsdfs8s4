@@ -1,6 +1,9 @@
 package com.anywr.ahmedtest.domain;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -30,6 +33,7 @@ public class Student implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties(value = { "teacher" }, allowSetters = true)
     private StudyClass studyClass;
 
     public Long getId() {

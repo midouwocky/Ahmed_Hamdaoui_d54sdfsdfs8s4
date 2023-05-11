@@ -75,11 +75,21 @@ public class StudentService {
      * Get all the students.
      *
      * @param pageable the pagination information.
+     * @param studyClassName StudyClass name
+     * @param teacherFullName Teacher full name 'firsName lastName'
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public Page<Student> findAll(Pageable pageable) {
+    public Page<Student> findAll(Pageable pageable, String studyClassName, String teacherFullName) {
         log.debug("Request to get all Students");
+        if (studyClassName != null && teacherFullName != null) {
+        	return studentRepository.findByStudyClassNameAndTeacherFullName(studyClassName, teacherFullName, pageable);
+        } else if (studyClassName != null) {
+        	return studentRepository.findByStudyClassName(studyClassName, pageable);
+        } else if (teacherFullName != null) {
+        	return studentRepository.findByTeacherFullName(teacherFullName, pageable);
+        }
+        
         return studentRepository.findAll(pageable);
     }
 
