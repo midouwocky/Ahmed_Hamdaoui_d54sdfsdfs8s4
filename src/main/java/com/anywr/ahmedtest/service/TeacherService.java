@@ -104,4 +104,16 @@ public class TeacherService {
         log.debug("Request to delete Teacher : {}", id);
         teacherRepository.deleteById(id);
     }
+    
+    /**
+     * Get one teacher by study class id.
+     *
+     * @param id the id of the entity StudyClass.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<Teacher> findOneByStudyClassId(Long id) {
+        log.debug("Request to get Teacher of an existing class : {}", id);
+        return teacherRepository.findOneByStudyClassId(id);
+    }
 }

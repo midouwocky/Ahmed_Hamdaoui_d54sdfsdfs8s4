@@ -1,8 +1,10 @@
 package com.anywr.ahmedtest.web.rest;
 
+import com.anywr.ahmedtest.domain.StudyClass;
 import com.anywr.ahmedtest.domain.Teacher;
 import com.anywr.ahmedtest.management.PaginationUtil;
 import com.anywr.ahmedtest.repository.TeacherRepository;
+import com.anywr.ahmedtest.service.StudyClassService;
 import com.anywr.ahmedtest.service.TeacherService;
 import com.anywr.ahmedtest.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -33,10 +35,13 @@ public class TeacherResource {
 	private final TeacherService teacherService;
 
 	private final TeacherRepository teacherRepository;
+	
+	private final StudyClassService studyClassService;
 
-	public TeacherResource(TeacherService teacherService, TeacherRepository teacherRepository) {
+	public TeacherResource(TeacherService teacherService, TeacherRepository teacherRepository, StudyClassService studyClassService) {
 		this.teacherService = teacherService;
 		this.teacherRepository = teacherRepository;
+		this.studyClassService = studyClassService;
 	}
 
 	/**
@@ -55,6 +60,9 @@ public class TeacherResource {
 		if (teacherDTO.getId() != null) {
 			throw new BadRequestAlertException("A new teacher cannot already have an ID");
 		}
+		
+		this.checkStudyClassExistance(teacherDTO);
+		
 		Teacher result = teacherService.save(teacherDTO);
 		return ResponseEntity.created(new URI("/api/teachers/" + result.getId())).body(result);
 	}
@@ -85,6 +93,8 @@ public class TeacherResource {
 		if (!teacherRepository.existsById(id)) {
 			throw new BadRequestAlertException("Entity not found");
 		}
+		
+		this.checkStudyClassExistance(teacherDTO);
 
 		Teacher result = teacherService.update(teacherDTO);
 		return ResponseEntity.ok().body(result);
@@ -168,4 +178,17 @@ public class TeacherResource {
 		teacherService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+	
+    private void checkStudyClassExistance(Teacher teacher) {
+        Optional<StudyClass> studyClass = this.studyClassService.findOne(teacher.getStudyClass().getId());
+        if (studyClass.isEmpty()) {
+        	throw new BadRequestAlertException("Study Class doesn't exist");
+        }
+        // check if study class belong to another teacher
+        Optional<Teacher> oldTeacher = this.teacherService.findOneByStudyClassId(teacher.getStudyClass().getId());
+        
+        if (oldTeacher.isPresent()) {
+        	throw new BadRequestAlertException("Study Class has already a teacher");
+        }
+    }
 }

@@ -1,9 +1,11 @@
 package com.anywr.ahmedtest.web.rest;
 
 import com.anywr.ahmedtest.domain.Student;
+import com.anywr.ahmedtest.domain.StudyClass;
 import com.anywr.ahmedtest.management.PaginationUtil;
 import com.anywr.ahmedtest.repository.StudentRepository;
 import com.anywr.ahmedtest.service.StudentService;
+import com.anywr.ahmedtest.service.StudyClassService;
 import com.anywr.ahmedtest.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,10 +35,13 @@ public class StudentResource {
     private final StudentService studentService;
 
     private final StudentRepository studentRepository;
+    
+    private final StudyClassService studyClassService;
 
-    public StudentResource(StudentService studentService, StudentRepository studentRepository) {
+    public StudentResource(StudentService studentService, StudentRepository studentRepository, StudyClassService studyClassService) {
         this.studentService = studentService;
         this.studentRepository = studentRepository;
+		this.studyClassService = studyClassService;
     }
 
     /**
@@ -53,6 +57,7 @@ public class StudentResource {
         if (student.getId() != null) {
             throw new BadRequestAlertException("A new student cannot already have an ID");
         }
+        this.checkStudyClassExistance(student);
         Student result = studentService.save(student);
         return ResponseEntity
             .created(new URI("/api/students/" + result.getId()))
@@ -85,6 +90,8 @@ public class StudentResource {
         if (!studentRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found");
         }
+        
+        this.checkStudyClassExistance(studentDTO);
 
         Student result = studentService.update(studentDTO);
         return ResponseEntity
@@ -121,7 +128,7 @@ public class StudentResource {
         }
 
         Optional<Student> result = studentService.partialUpdate(studentDTO);
-        return result.map(student -> ResponseEntity.ok().body(student))
+        return result.map(studentRes -> ResponseEntity.ok().body(studentRes))
         		.orElseThrow(() -> new BadRequestAlertException("student not found"));
     }
 
@@ -149,7 +156,7 @@ public class StudentResource {
     public ResponseEntity<Student> getStudent(@PathVariable Long id) {
         log.debug("REST request to get Student : {}", id);
         Optional<Student> studentDTO = studentService.findOne(id);
-        return studentDTO.map(student -> ResponseEntity.ok().body(student))
+        return studentDTO.map(studentRes -> ResponseEntity.ok().body(studentRes))
         		.orElseThrow(() -> new BadRequestAlertException("student not found"));
     }
 
@@ -165,5 +172,12 @@ public class StudentResource {
         studentService.delete(id);
         return ResponseEntity
             .noContent().build();
+    }
+    
+    private void checkStudyClassExistance(Student student) {
+        Optional<StudyClass> studyClass = this.studyClassService.findOne(student.getStudyClass().getId());
+        if (studyClass.isEmpty()) {
+        	throw new BadRequestAlertException("Study Class doesn't exist");
+        }
     }
 }
